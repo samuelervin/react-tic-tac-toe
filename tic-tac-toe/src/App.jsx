@@ -23,8 +23,23 @@ export default function App() {
   const [gameTurns, setGameTurns] = useState([]);
  // const [activePlayer, setActivePlayer] = useState('X');
 
+ // Derive the active player based on the game turns
  let activePlayer = deriveActivePlayer(gameTurns);
+ let winner;
+
+ //setup iniital gameboard
  let gameboard = initalGameboard;
+//computer the turns
+if(gameTurns.length > 0) {
+    gameTurns.forEach(turn => { 
+        const {square, player} = turn;
+        const {row, col} = square;
+        gameboard[row][col] = player;
+
+    }
+    );
+}
+
 
 function handleSelectSquare(rowIndex, colIndex) {
  // setActivePlayer((prevPlayer) => prevPlayer === 'X' ? 'O' : 'X');
@@ -36,9 +51,20 @@ function handleSelectSquare(rowIndex, colIndex) {
   } // end handleSelectSquare
 
 
-
+//check for winning combinations
   for (const combination of WINNING_COMBINATIONS) {
-    
+    console.log('gameboard', gameboard);
+    const firstSquareSymbol = gameboard[combination[0].row][combination[0].column];
+    console.log('firstSquareSymbol', firstSquareSymbol);
+    const secondSquareSymbol = gameboard[combination[1].row][combination[1].column];
+    console.log('secondSquareSymbol', secondSquareSymbol);
+    const thirdSquareSymbol = gameboard[combination[2].row][combination[2].column];
+    console.log('thirdSquareSymbol', thirdSquareSymbol);
+
+    if (firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
+      winner = firstSquareSymbol;
+    } 
+    console.log('winner', winner);
   }
 
   return (
@@ -48,9 +74,11 @@ function handleSelectSquare(rowIndex, colIndex) {
          <Player name='player1' symbol='X' isActive={activePlayer === 'X'}/>
          <Player name='player2' symbol='O' isActive={activePlayer === 'O'}/>
         </ol>
-
+    
+        {winner && `You won ${winner}!`}
+     
         <GameBoard 
-          turns={gameTurns}
+          board={gameboard}
           onSelectSquare={handleSelectSquare} activePlayerSymbol={activePlayer} />
       </div>
       <Log turns={gameTurns}/>
