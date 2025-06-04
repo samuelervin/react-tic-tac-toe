@@ -35,7 +35,7 @@ function handleSelectSquare(rowIndex, colIndex) {
                 });
   } // end handleSelectSquare
 
- for
+
 
   for (const combination of WINNING_COMBINATIONS) {
     
